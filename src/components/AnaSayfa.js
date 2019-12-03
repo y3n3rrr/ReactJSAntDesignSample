@@ -1,58 +1,13 @@
 import React, { Component } from 'react'
 
+import {connect} from 'react-redux'
+import {createUser} from '../actions'
+
 import {
     Form,
     Input,
-    Tooltip,
-    Icon,
-    Cascader,
-    Select,
-    Row,
-    Col,
-    Checkbox,
     Button,
-    AutoComplete,
   } from 'antd';
-  
-  const { Option } = Select;
-  const AutoCompleteOption = AutoComplete.Option;
-
-  const residences = [
-    {
-      value: 'zhejiang',
-      label: 'Zhejiang',
-      children: [
-        {
-          value: 'hangzhou',
-          label: 'Hangzhou',
-          children: [
-            {
-              value: 'xihu',
-              label: 'West Lake',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      value: 'jiangsu',
-      label: 'Jiangsu',
-      children: [
-        {
-          value: 'nanjing',
-          label: 'Nanjing',
-          children: [
-            {
-              value: 'zhonghuamen',
-              label: 'Zhong Hua Men',
-            },
-          ],
-        },
-      ],
-    },
-  ];
-
-  
 
 class AnaSayfa extends Component {
     state = {
@@ -64,6 +19,8 @@ class AnaSayfa extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
           if (!err) {
+            debugger
+            this.props.createUser(values)
           }
         });
       };
@@ -100,7 +57,7 @@ class AnaSayfa extends Component {
         return (
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
             <Form.Item label="Kullanici Adi">
-              {getFieldDecorator('username', {
+              {getFieldDecorator('kullaniciadi', {
                 rules: [
                   {
                     required: true,
@@ -110,7 +67,7 @@ class AnaSayfa extends Component {
               })(<Input />)}
             </Form.Item>
             <Form.Item label="Gorevi" hasFeedback>
-              {getFieldDecorator('nickname', {
+              {getFieldDecorator('gorevi', {
                 rules: [
                   {
                     required: true,
@@ -132,4 +89,4 @@ class AnaSayfa extends Component {
 
 const WrappedRegistrationForm = Form.create({ name: 'register' })(AnaSayfa);
 
-export default WrappedRegistrationForm;
+export default connect(null, {createUser})(WrappedRegistrationForm);

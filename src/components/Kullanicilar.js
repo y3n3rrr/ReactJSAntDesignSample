@@ -1,47 +1,60 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {getUsers} from '../actions'
+import { getUsers } from '../actions'
+import {GetResources} from '../helpers/hooksHelper'
+import { Spin } from 'antd'
 
 class Kullanicilar extends Component {
     constructor(props){
         super(props)
     }
 
-    componentDidMount(){
-        debugger
+    componentDidMount() {
         this.props.getUsers()
     }
-    renderItems = () => {
-        var outputs = [];
-        if(this.props.users.length > 0){
-            outputs = this.props.users[0].map((val, i) => {
-                return (
-                    <p>
-            <strong>Kullanici Adi</strong>:{val.kullaniciadi}<br />
-            <strong>Gorevi</strong>:{val.gorevi}<br />
-                    </p>
-                )
-            })
-        }
-        
-
-        return outputs;
-    }
+    
     render() {
         return (
             <div>
-                kullanicilar sayfasi..
-                {this.renderItems()}   
+                Kullanıcılar Sayfası..
+                <RenderJSX endpoint = {'posts'} />   
             </div>
         )
     }
 }
 
-const mapStateToProps = (state) => {
-    const { users } = state
-    return {
-        users,
-        yener:[12,3,4,324,32,432]
+export const RenderJSX = ({endpoint}) =>
+{
+    debugger
+    const items = GetResources(endpoint)
+    if(items.length == 0)
+    {
+        return (
+            <div>
+                <Spin />
+                Yukleniyor.. 
+            </div>
+        )
     }
+    return (
+        <div>
+            {items.map((val, i) => {
+                if(val.kullaniciadi){
+                    return (
+                    <p key={val.id}>
+                        <strong>{val.kullaniciadi}</strong> 
+                        <br />
+                        { val.gorevi }
+                    </p>)
+                }
+            })}
+        </div>
+    )
+}
+
+const mapStateToProps = (state) => {
+    const {users} = state;
+    return { users }
 }
 export default connect(mapStateToProps, {getUsers})(Kullanicilar)
+
